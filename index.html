@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shello Estetica Salon & Spa</title>
+    <!-- Favicon SVG -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z' fill='%23c9b19e'/%3E%3Cpath d='M12 4.5c-4.142 0-7.5 3.358-7.5 7.5S7.858 19.5 12 19.5s7.5-3.358 7.5-7.5S16.142 4.5 12 4.5zm0 13.5c-3.314 0-6-2.686-6-6s2.686-6 6-6 6 2.686 6 6-2.686 6-6 6z' fill='%23c9b19e'/%3E%3Cpath d='M12 6.5c-2.485 0-4.5 2.015-4.5 4.5s2.015 4.5 4.5 4.5 4.5-2.015 4.5-4.5-2.015-4.5-4.5-4.5zm0 7.5c-1.381 0-2.5-1.119-2.5-2.5s1.119-2.5 2.5-2.5 2.5 1.119 2.5 2.5-1.119 2.5-2.5 2.5z' fill='%23c9b19e'/%3E%3Cpath d='M12 9.5c-.828 0-1.5-.672-1.5-1.5s.672-1.5 1.5-1.5 1.5.672 1.5 1.5-.672 1.5-1.5 1.5z' fill='%234b3d36'/%3E%3C/svg%3E">
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN for easy icon usage -->
+    <script src="https://cdn.jsdelivr.net/npm/lucide-react@0.292.0"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f3f0;
+            color: #4b3d36;
+        }
+
+        /* Custom animation for intersection observer */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transition-delay: 0.1s;
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom carousel styling */
+        .carousel-container {
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .carousel-item {
+            flex: 0 0 90%;
+            margin-right: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .carousel-item {
+                flex: 0 0 45%;
+                margin-right: 1.5rem;
+            }
+        }
+        @media (min-width: 1024px) {
+            .carousel-item {
+                flex: 0 0 30%;
+                margin-right: 2rem;
+            }
+        }
+
+        /* Custom styling for icons */
+        .icon {
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+        
+        .icon-small {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        /* Custom utility classes for colors */
+        .bg-primary { background-color: #c9b19e; }
+        .text-primary { color: #c9b19e; }
+        .bg-secondary { background-color: #f7f3f0; }
+        .text-secondary { color: #f7f3f0; }
+        .bg-dark-brown { background-color: #4b3d36; }
+        .text-dark-brown { color: #4b3d36; }
+        .border-brown { border-color: #4b3d36; }
+        
+        /* Lightbox styling */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .lightbox-image {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        
+        .close-btn:hover {
+            opacity: 1;
+        }
+
+    </style>
+</head>
+<body class="bg-secondary text-dark-brown leading-relaxed">
+
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-secondary/80 backdrop-blur-md shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#hero" class="w-36 h-12">
+                <img src="/shello_logo.png" class="w-full" alt="">
+            </a>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#services" class="hover:text-primary transition-colors">Services</a>
+                <a href="#about" class="hover:text-primary transition-colors">About</a>
+                <a href="#team" class="hover:text-primary transition-colors">Team</a>
+                <a href="#contact" class="hover:text-primary transition-colors">Contact</a>
+                <a href="#contact" class="bg-dark-brown text-white px-6 py-2 rounded-full hover:bg-primary transition-colors shadow-lg">Book Now</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                    <line x1="4" y1="12" x2="20" y2="12"></line>
+                    <line x1="4" y1="6" x2="20" y2="6"></line>
+                    <line x1="4" y1="18" x2="20" y2="18"></line>
+                </svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-secondary/90 backdrop-blur-sm pt-4 pb-6 space-y-4 text-center">
+            <a href="#services" class="block py-2 hover:text-primary transition-colors">Services</a>
+            <a href="#about" class="block py-2 hover:text-primary transition-colors">About</a>
+            <a href="#team" class="block py-2 hover:text-primary transition-colors">Team</a>
+            <a href="#contact" class="block py-2 hover:text-primary transition-colors">Contact</a>
+            <a href="#contact" class="inline-block bg-dark-brown text-white px-6 py-2 rounded-full hover:bg-primary transition-colors shadow-lg">Book Now</a>
+        </div>
+    </header>
+
+    <main class="pt-16">
+        <!-- Hero Section -->
+        <section id="hero" class="relative w-full h-screen flex items-center justify-center text-white text-center p-4 overflow-hidden">
+            <div id="hero-bg" class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1503891617560-5b8c2e28cbf6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTEyfHxzcGF8ZW58MHx8MHx8fDA%3D');"></div>
+            <div class="absolute inset-0 bg-dark-brown/60"></div>
+            <div class="relative z-10 fade-in-section flex flex-col items-center">
+                <div class="w-32 h-32 md:w-64 md:h-48 mb-4">
+                    <img src="/shello_logo.png" alt="">
+                </div>
+                <h1 class="text-3xl md:text-5xl font-bold mb-4">Salon &amp; Theatric Spa</h1>
+                <p class="text-xl md:text-2xl mb-8 font-light max-w-2xl mx-auto">
+                   Where elegance comes first.
+                </p>
+                <a href="#services" class="bg-primary text-white font-semibold px-8 py-4 rounded-full text-lg hover:bg-white hover:text-primary transition-colors duration-300 shadow-xl">
+                    Explore Services
+                </a>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="container mx-auto px-6 py-24 fade-in-section">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">Our Services</h2>
+            <div class="relative">
+                <div id="carousel-inner" class="flex overflow-x-scroll no-scrollbar py-4 px-2 -mx-2 carousel-container">
+                    <!-- Service 1 -->
+                    <div class="carousel-item p-4 bg-white rounded-2xl shadow-md flex-shrink-0">
+                        <img src="https://placehold.co/400x300/c9b19e/4b3d36?text=Facials" alt="Facial services" class="w-full h-48 object-cover rounded-xl mb-4">
+                        <h3 class="text-2xl font-semibold mb-2 text-dark-brown">Facial Treatments</h3>
+                        <p class="text-sm text-gray-600">Rejuvenate your skin with our personalized facial treatments, designed to cleanse, hydrate, and nourish.</p>
+                    </div>
+                    <!-- Service 2 -->
+                    <div class="carousel-item p-4 bg-white rounded-2xl shadow-md flex-shrink-0">
+                        <img src="https://placehold.co/400x300/4b3d36/f7f3f0?text=Massages" alt="Massage services" class="w-full h-48 object-cover rounded-xl mb-4">
+                        <h3 class="text-2xl font-semibold mb-2 text-dark-brown">Relaxing Massages</h3>
+                        <p class="text-sm text-gray-600">Escape the stress with our therapeutic massages, from deep tissue to hot stone, tailored to your needs.</p>
+                    </div>
+                    <!-- Service 3 -->
+                    <div class="carousel-item p-4 bg-white rounded-2xl shadow-md flex-shrink-0">
+                        <img src="https://placehold.co/400x300/c9b19e/4b3d36?text=Waxing" alt="Waxing services" class="w-full h-48 object-cover rounded-xl mb-4">
+                        <h3 class="text-2xl font-semibold mb-2 text-dark-brown">Waxing Services</h3>
+                        <p class="text-sm text-gray-600">Achieve smooth, silky skin with our professional and gentle waxing services for a flawless finish.</p>
+                    </div>
+                    <!-- Service 4 -->
+                    <div class="carousel-item p-4 bg-white rounded-2xl shadow-md flex-shrink-0">
+                        <img src="https://placehold.co/400x300/4b3d36/f7f3f0?text=Manicure" alt="Nail services" class="w-full h-48 object-cover rounded-xl mb-4">
+                        <h3 class="text-2xl font-semibold mb-2 text-dark-brown">Manicure & Pedicure</h3>
+                        <p class="text-sm text-gray-600">Pamper your hands and feet with our luxurious manicure and pedicure treatments.</p>
+                    </div>
+                    <!-- Service 5 -->
+                    <div class="carousel-item p-4 bg-white rounded-2xl shadow-md flex-shrink-0">
+                        <img src="https://placehold.co/400x300/c9b19e/4b3d36?text=Body+Wraps" alt="Body wrap services" class="w-full h-48 object-cover rounded-xl mb-4">
+                        <h3 class="text-2xl font-semibold mb-2 text-dark-brown">Body Wraps</h3>
+                        <p class="text-sm text-gray-600">Experience a detoxifying and hydrating body wrap to nourish your skin and relax your mind.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-center mt-8 space-x-4">
+                <button id="prev-btn" class="bg-dark-brown text-white p-3 rounded-full shadow-lg hover:bg-primary transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <button id="next-btn" class="bg-dark-brown text-white p-3 rounded-full shadow-lg hover:bg-primary transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="container mx-auto px-6 py-24 fade-in-section">
+            <div class="flex flex-col lg:flex-row items-center lg:space-x-12">
+                <div class="lg:w-1/2 mb-8 lg:mb-0">
+                    <img src="https://images.unsplash.com/photo-1630893174210-eea582de3c74?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTQ3fHxzcGF8ZW58MHx8MHx8fDA%3D" alt="Shello Estetica Spa Interior" class="w-full h-auto object-cover rounded-2xl shadow-lg">
+                </div>
+                <div class="lg:w-1/2">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">About Our Sanctuary</h2>
+                    <p class="text-lg mb-4">
+                        At Shello Estetica, we believe that beauty is a reflection of inner harmony. Our sanctuary is designed to provide a tranquil escape from the everyday hustle, where every treatment is a journey towards relaxation and self-care. We use only the finest natural products and advanced techniques to ensure you leave feeling renewed and radiant.
+                    </p>
+                    <p class="text-lg">
+                        Our expert team of therapists and aestheticians are dedicated to creating a personalized experience for each client, focusing on your unique needs and desires. Discover a world of serenity and let us guide you on your path to wellness.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="container mx-auto px-6 py-24 fade-in-section">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">Gallery</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Gallery Images with Data Attributes for Lightbox -->
+                <div class="rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-transform duration-300 hover:scale-105" data-image="https://images.unsplash.com/photo-1620733717720-bdbe43674ab9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY0fHxzcGF8ZW58MHx8MHx8fDA%3D">
+                    <img src="https://images.unsplash.com/photo-1620733717720-bdbe43674ab9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY0fHxzcGF8ZW58MHx8MHx8fDA%3D" alt="Spa Interior" class="w-full h-full object-cover">
+                </div>
+                <div class="rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-transform duration-300 hover:scale-105" data-image="https://images.unsplash.com/photo-1620733717720-bdbe43674ab9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY0fHxzcGF8ZW58MHx8MHx8fDA%3D">
+                    <img src="https://images.unsplash.com/photo-1620733717720-bdbe43674ab9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY0fHxzcGF8ZW58MHx8MHx8fDA%3D" alt="Massage Room" class="w-full h-full object-cover">
+                </div>
+                <div class="rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-transform duration-300 hover:scale-105" data-image="https://images.unsplash.com/photo-1620733717720-bdbe43674ab9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY0fHxzcGF8ZW58MHx8MHx8fDA%3D">
+                    <img src="https://images.unsplash.com/photo-1620733717720-bdbe43674ab9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY0fHxzcGF8ZW58MHx8MHx8fDA%3D" alt="Relaxation Area" class="w-full h-full object-cover">
+                </div>
+                <div class="rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-transform duration-300 hover:scale-105" data-image="https://images.unsplash.com/photo-1620733717720-bdbe43674ab9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY0fHxzcGF8ZW58MHx8MHx8fDA%3D">
+                    <img src="https://images.unsplash.com/photo-1620733717720-bdbe43674ab9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY0fHxzcGF8ZW58MHx8MHx8fDA%3D" alt="Treatment Room" class="w-full h-full object-cover">
+                </div>
+                <div class="rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-transform duration-300 hover:scale-105" data-image="https://images.unsplash.com/photo-1620733717720-bdbe43674ab9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY0fHxzcGF8ZW58MHx8MHx8fDA%3D">
+                    <img src="https://images.unsplash.com/photo-1620733717720-bdbe43674ab9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY0fHxzcGF8ZW58MHx8MHx8fDA%3D" alt="Product Display" class="w-full h-full object-cover">
+                </div>
+                <div class="rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-transform duration-300 hover:scale-105" data-image="https://images.unsplash.com/photo-1620733717720-bdbe43674ab9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY0fHxzcGF8ZW58MHx8MHx8fDA%3D">
+                    <img src="https://images.unsplash.com/photo-1620733717720-bdbe43674ab9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY0fHxzcGF8ZW58MHx8MHx8fDA%3D" alt="Service in progress" class="w-full h-full object-cover">
+                </div>
+                <div class="rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-transform duration-300 hover:scale-105" data-image="https://images.unsplash.com/photo-1620733717720-bdbe43674ab9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY0fHxzcGF8ZW58MHx8MHx8fDA%3D">
+                    <img src="https://images.unsplash.com/photo-1620733717720-bdbe43674ab9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY0fHxzcGF8ZW58MHx8MHx8fDA%3D" alt="Spa Lobby" class="w-full h-full object-cover">
+                </div>
+                <div class="rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-transform duration-300 hover:scale-105" data-image="https://images.unsplash.com/photo-1620733717720-bdbe43674ab9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY0fHxzcGF8ZW58MHx8MHx8fDA%3D">
+                    <img src="https://images.unsplash.com/photo-1620733717720-bdbe43674ab9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTY0fHxzcGF8ZW58MHx8MHx8fDA%3D" alt="Front Desk" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section id="team" class="container mx-auto px-6 py-24 fade-in-section">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">Meet Our Experts</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Team Member 1 -->
+                <div class="flex flex-col items-center text-center p-6 bg-white rounded-2xl shadow-md">
+                    <img src="https://placehold.co/150x150/c9b19e/4b3d36?text=Jane" alt="Team Member Jane" class="w-36 h-36 object-cover rounded-full mb-4 shadow-lg">
+                    <h3 class="text-2xl font-semibold mb-1">Jane Doe</h3>
+                    <p class="text-primary font-medium">Lead Aesthetician</p>
+                    <p class="mt-2 text-sm text-gray-600">Specializing in holistic skin treatments and rejuvenation techniques.</p>
+                </div>
+                <!-- Team Member 2 -->
+                <div class="flex flex-col items-center text-center p-6 bg-white rounded-2xl shadow-md">
+                    <img src="https://placehold.co/150x150/4b3d36/f7f3f0?text=John" alt="Team Member John" class="w-36 h-36 object-cover rounded-full mb-4 shadow-lg">
+                    <h3 class="text-2xl font-semibold mb-1">John Smith</h3>
+                    <p class="text-primary font-medium">Massage Therapist</p>
+                    <p class="mt-2 text-sm text-gray-600">Expert in therapeutic massage and bodywork for ultimate relaxation.</p>
+                </div>
+                <!-- Team Member 3 -->
+                <div class="flex flex-col items-center text-center p-6 bg-white rounded-2xl shadow-md">
+                    <img src="https://placehold.co/150x150/c9b19e/4b3d36?text=Emily" alt="Team Member Emily" class="w-36 h-36 object-cover rounded-full mb-4 shadow-lg">
+                    <h3 class="text-2xl font-semibold mb-1">Emily Chen</h3>
+                    <p class="text-primary font-medium">Nail Specialist</p>
+                    <p class="mt-2 text-sm text-gray-600">Creative artist with a passion for beautiful, healthy manicures and pedicures.</p>
+                </div>
+                <!-- Team Member 4 -->
+                <div class="flex flex-col items-center text-center p-6 bg-white rounded-2xl shadow-md">
+                    <img src="https://placehold.co/150x150/4b3d36/f7f3f0?text=Sarah" alt="Team Member Sarah" class="w-36 h-36 object-cover rounded-full mb-4 shadow-lg">
+                    <h3 class="text-2xl font-semibold mb-1">Sarah Davis</h3>
+                    <p class="text-primary font-medium">Skincare Consultant</p>
+                    <p class="mt-2 text-sm text-gray-600">Provides personalized skincare routines and product recommendations.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="container mx-auto px-6 py-24 fade-in-section">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12">Contact Us</h2>
+            <div class="bg-white p-8 rounded-2xl shadow-lg flex flex-col md:flex-row items-start md:space-x-12">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h3 class="text-3xl font-bold mb-4">Book Your Appointment</h3>
+                    <p class="text-lg text-gray-600 mb-6">
+                        Fill out the form below to book a consultation or to inquire about our services. We look forward to seeing you.
+                    </p>
+                    <form id="contact-form" class="space-y-4">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                            <input type="text" id="name" name="name" class="mt-1 block w-full rounded-md border-brown focus:border-primary focus:ring-primary p-3 bg-secondary" placeholder="Your Name" required>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" id="email" name="email" class="mt-1 block w-full rounded-md border-brown focus:border-primary focus:ring-primary p-3 bg-secondary" placeholder="you@example.com" required>
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                            <textarea id="message" name="message" rows="4" class="mt-1 block w-full rounded-md border-brown focus:border-primary focus:ring-primary p-3 bg-secondary" placeholder="How can we help you?" required></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-dark-brown text-white py-3 rounded-full hover:bg-primary transition-colors duration-300 font-semibold shadow-lg">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+                <div class="md:w-1/2">
+                    <h3 class="text-3xl font-bold mb-4">Our Information</h3>
+                    <ul class="space-y-4">
+                        <li>
+                            <div class="flex items-center space-x-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-primary icon-small">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                </svg>
+                                <span class="text-lg">+1 (123) 456-7890</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="flex items-center space-x-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-primary icon-small">
+                                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                                    <path d="m22 7-10 7L2 7"></path>
+                                </svg>
+                                <span class="text-lg">info@shelloestetica.com</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="flex items-center space-x-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon text-primary icon-small">
+                                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <span class="text-lg">123 Tranquil Lane, Suite 101, Serenity City</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="mt-8">
+                        <h3 class="text-2xl font-bold mb-4">Follow Us</h3>
+                        <div class="flex space-x-4">
+                            <a href="#" class="text-gray-600 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                </svg>
+                                <span class="sr-only">Instagram</span>
+                            </a>
+                            <a href="#" class="text-gray-600 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                                </svg>
+                                <span class="sr-only">Facebook</span>
+                            </a>
+                            <a href="#" class="text-gray-600 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                                    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 11.5-13.3 10.4 7.2-2.3 13.3-8.4 13.3-8.4S15.5 2.5 12 2c-1 2.5-4 4.1-6 5.5-2-.6-4-2.2-5-4.5z"/>
+                                </svg>
+                                <span class="sr-only">Twitter</span>
+                            </a>
+                            <a href="#" class="text-gray-600 hover:text-primary transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                                    <path d="M10.2 13.4c.5 1.5.3 2.9-1.2 3.6-1.5.7-3.1 0-3.9-1.5-.7-1.5-.3-2.9 1.2-3.6 1.5-.7 3.1 0 3.9 1.5zm6.8-5c-1.5.7-3.1 0-3.9-1.5-.7-1.5-.3-2.9 1.2-3.6 1.5-.7 3.1 0 3.9 1.5.7 1.5.3 2.9-1.2 3.6z"/>
+                                    <path d="M15 11c-1.6 0-3-.5-4.3-1.3l-.2-.1c-.3-.2-.5-.4-.7-.6-.2-.2-.3-.3-.5-.5-.1-.1-.2-.2-.3-.3-.1-.1-.2-.2-.3-.3-1.2-1.3-2.1-2.9-2.6-4.7C2.5 6.7 6.7 2.5 12 2c5.5 0 10 4.5 10 10s-4.5 10-10 10c-1.3 0-2.6-.3-3.8-.8c-.7-.3-1.4-.7-2.1-1.2l-.7-.5c-.3-.2-.5-.4-.7-.6z"/>
+                                </svg>
+                                <span class="sr-only">Pinterest</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Lightbox HTML structure (hidden by default) -->
+    <div id="lightbox" class="lightbox">
+        <button id="close-lightbox" class="close-btn">&times;</button>
+        <div class="lightbox-content">
+            <img id="lightbox-image" src="" alt="Full-size image" class="lightbox-image">
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark-brown text-white py-12">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2024 Shello Estetica Salon & Spa. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                // Close mobile menu after clicking a link
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        // Intersection Observer for animations
+        const sections = document.querySelectorAll('.fade-in-section');
+        const observerOptions = {
+            root: null,
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Carousel logic
+        const carousel = document.getElementById('carousel-inner');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        const scrollAmount = 300; // Adjust this value to control scroll distance
+
+        prevBtn.addEventListener('click', () => {
+            carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+
+        nextBtn.addEventListener('click', () => {
+            carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+
+        // Parallax effect for the hero section
+        const heroBg = document.getElementById('hero-bg');
+        let isTicking = false;
+
+        const updateParallax = () => {
+            const scrolledY = window.scrollY;
+            // Adjust the parallax speed by changing the division value
+            heroBg.style.transform = `translateY(${scrolledY * 0.4}px)`;
+            isTicking = false;
+        };
+
+        window.addEventListener('scroll', () => {
+            if (!isTicking) {
+                window.requestAnimationFrame(updateParallax);
+                isTicking = true;
+            }
+        });
+
+        // Lightbox logic
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const closeLightboxBtn = document.getElementById('close-lightbox');
+        const galleryImages = document.querySelectorAll('#gallery .cursor-pointer');
+
+        galleryImages.forEach(image => {
+            image.addEventListener('click', (e) => {
+                const imageUrl = e.currentTarget.getAttribute('data-image');
+                lightboxImage.src = imageUrl;
+                lightbox.style.display = 'flex';
+            });
+        });
+
+        closeLightboxBtn.addEventListener('click', () => {
+            lightbox.style.display = 'none';
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
